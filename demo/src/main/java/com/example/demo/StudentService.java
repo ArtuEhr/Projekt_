@@ -19,28 +19,15 @@ public class StudentService {
 
     List<Student> getStudents() {
         return List.ofAll(this.repository.findAll())
-                .map(getStudentRowStudentFunction()
-                );
+                .map(StudentRow::toStudent);
 
-    }
-
-    private Function<StudentRow, Student> getStudentRowStudentFunction() {
-        return dbObj->
-                new Student(
-                        dbObj.getId(),
-                        dbObj.getName(),
-                        dbObj.getNumer(),
-                        dbObj.getGrupa());
     }
 
     Student addStudent(final NewStudent newStudent) {
-        StudentRow created = this.repository.save(new StudentRow(
+        return this.repository.save(new StudentRow(
                 newStudent.name,
                 newStudent.numer,
-                newStudent.grupa));
-
-        return getStudentRowStudentFunction().apply(created);
-
-    }
+                newStudent.grupa)).toStudent();}
 
 }
+
